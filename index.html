@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>      
+    <meta charset = "UTF-8">
+    <title>电影推荐</title>
+    <!-- 上面是网页的基本设置，比如编码和标题 -->
+    <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 600px;
+                margin: 40px auto;
+                padding: 0 20px;
+                background-color: #f9f9f9;
+                color: #333;
+            }
+            h1 {
+                    text-align: center;
+                    margin-bottom: 30px;
+            }
+
+            #movie-container{
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                    margin-bottom: 20px;
+            }
+
+            #movie-container h2{
+                    margin-top: 0;
+            }
+
+            button:hover{
+                    background-color: #0056b3;
+            }
+
+            #recommendation{
+                    background: #fff7e6;
+                    border: 1px solid #ffe58f;
+                    border-radius: 8px;
+                    padding: 15px;
+            }
+    </style>
+</head>
+<body>
+<!-- 以后我们要把电影列表、按钮这些放在这里 -->
+        <h1>欢迎使用电影推荐系统</h1>
+        <!--展示电影信息的容器-->
+        <div id="movie-container"></div>
+
+        <!--选择按钮-->
+        <div id="choice-buttons" style="margin-top: 20px;">
+                <button onclick="handleChoice('Like')">Like</button>
+                <button onclick="handleChoice('Dislike')">DisLike</button>
+                <button onclick="handleChoice('Dont know')">DontKnow</button>
+        </div>
+
+        <button onclick="clearChoices()" style="background-color: red; margin-top: 20px">清除历史记录</button>
+        <button onclick="toggleFavorite()">收藏</button>
+        <div id="favorite-list" style="margin-top: 30px;"></div>
+
+        <!--推荐区域-->
+        <div id="recommendation" style="margin-top: 30px;"></div>
+        <button onclick="recommendMore()" style="margin-top: 15px;">再推荐一部</button>
+
+        <script>
+        const movies = [
+        {
+          name: "肖申克的救赎",
+          rating: 9.7,
+          genre: "剧情",
+          description: "一位银行家在监狱中寻找自由与希望的故事。",
+          country: "美国",
+          language: "英语",
+          year: 1994
+        },
+        {
+          name: "阿甘正传",
+          rating: 9.5,
+          genre: "剧情",
+          description: "讲述一个智商不高却心地善良的男人经历传奇人生的故事。",
+          country: "美国",
+          language: "英语",
+          year: 1994
+        },
+        {
+          name: "盗梦空间",
+          rating: 9.3,
+          genre: "科幻",
+          description: "通过控制梦境来进行潜意识犯罪的科幻故事。",
+          country: "美国",
+          language: "英语",
+          year: 2010
+        },
+        {
+          name: "星际穿越",
+          rating: 9.2,
+          genre: "科幻",
+          description: "为了人类存续，一群人穿越虫洞寻找新家园。",
+          country: "美国",
+          language: "英语",
+          year: 2014
+        },
+        {
+          name: "复仇者联盟",
+          rating: 8.5,
+          genre: "动作",
+          description: "超级英雄们联合起来共同拯救世界。",
+          country: "美国",
+          language: "英语",
+          year: 2012
+        },
+        {
+          name: "泰坦尼克号",
+          rating: 9.1,
+          genre: "爱情",
+          description: "一段发生在豪华邮轮上的浪漫悲剧。",
+          country: "美国",
+          language: "英语",
+          year: 1997
+        },
+        {
+          name: "疯狂动物城",
+          rating: 8.7,
+          genre: "动画",
+          description: "一只兔子警察与狐狸骗子联手揭露阴谋。",
+          country: "美国",
+          language: "英语",
+          year: 2016
+        },
+        {
+          name: "寄生虫",
+          rating: 9.0,
+          genre: "剧情",
+          description: "揭示韩国社会阶层对立的黑色幽默电影。",
+          country: "韩国",
+          language: "韩语",
+          year: 2019
+        },
+        {
+          name: "海上钢琴师",
+          rating: 9.1,
+          genre: "剧情",
+          description: "一个从未踏上陆地的钢琴天才的传奇人生。",
+          country: "意大利",
+          language: "英语",
+          year: 1998
+        },
+        {
+          name: "大话西游",
+          rating: 9.0,
+          genre: "爱情",
+          description: "一段荒诞与深情交织的经典爱情故事。",
+          country: "中国",
+          language: "粤语",
+          year: 1995
+        },
+        {
+          name: "当幸福来敲门",
+          rating: 9.2,
+          genre: "励志",
+          description: "一位父亲为儿子奋斗寻找幸福的真实故事。",
+          country: "美国",
+          language: "英语",
+          year: 2006
+        },
+        {
+          name: "黑客帝国",
+          rating: 9.0,
+          genre: "科幻",
+          description: "人类反抗人工智能统治的经典科幻片。",
+          country: "美国",
+          language: "英语",
+          year: 1999
+        },
+        {
+          name: "千与千寻",
+          rating: 9.4,
+          genre: "奇幻",
+          description: "少女千寻误入神灵世界的奇幻成长旅程。",
+          country: "日本",
+          language: "日语",
+          year: 2001
+        },
+        {
+          name: "摔跤吧！爸爸",
+          rating: 9.1,
+          genre: "励志",
+          description: "印度父亲培养女儿成为摔跤冠军的感人故事。",
+          country: "印度",
+          language: "印地语",
+          year: 2016
+        },
+        {
+          name: "狮子王",
+          rating: 9.0,
+          genre: "动画",
+          description: "小狮子辛巴的成长、复仇与回归。",
+          country: "美国",
+          language: "英语",
+          year: 1994
+        },
+        {
+          name: "绿皮书",
+          rating: 9.0,
+          genre: "剧情",
+          description: "白人与黑人之间跨越种族的真挚友情。",
+          country: "美国",
+          language: "英语",
+          year: 2018
+        },
+        {
+          name: "机器人总动员",
+          rating: 9.2,
+          genre: "动画",
+          description: "垃圾地球上的小机器人寻找爱与希望。",
+          country: "美国",
+          language: "英语",
+          year: 2008
+        },
+        {
+          name: "楚门的世界",
+          rating: 9.3,
+          genre: "剧情",
+          description: "人生被直播的男人发现真相后选择自由。",
+          country: "美国",
+          language: "英语",
+          year: 1998
+        },
+        {
+          name: "放牛班的春天",
+          rating: 9.4,
+          genre: "音乐",
+          description: "音乐感化问题少年的温情故事。",
+          country: "法国",
+          language: "法语",
+          year: 2004
+        },
+        {
+          name: "活着",
+          rating: 9.3,
+          genre: "剧情",
+          description: "一户普通人家在历史变迁中的悲欢人生。",
+          country: "中国",
+          language: "普通话",
+          year: 1994
+        }
+        ];
+        let selectedMovies = [];        //最终展示的10部电影
+        let currentIndex = 0;           //当前展示的第几部
+        let recommendedMovies = [];     //存放已推荐的电影名
+        let userChoices = JSON.parse(localStorage.getItem("userChoices") || "{}");           //用户选择结果{电影名：喜好}
+        let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+        //打乱电影列表并取前10部
+        function getRandomMovies(){
+                const shuffled = [...movies].sort(() => Math.random() - 0.5);
+                return shuffled.slice(0, 10);
+        }
+
+        //显示当前电影
+        function showCurrentMovie(){
+                const movie = selectedMovies[currentIndex];
+                const container = document.getElementById("movie-container");
+                container.innerHTML = `
+                  <h2>${movie.name} (${movie.year})</h2>
+                  <p>评分: ${movie.rating} | 类型: ${movie.genre} | 国家: ${movie.country}</p>
+                  <p>${movie.description}</p>
+                `;
+        }
+
+        //处理按钮点击
+        function handleChoice(feedback){
+                const movie = selectedMovies[currentIndex];
+                userChoices[movie.name] = feedback;
+                localStorage.setItem("userChoices", JSON.stringify(userChoices));
+                currentIndex++;
+
+                if(currentIndex < selectedMovies.length){
+                        showCurrentMovie();     //显示下一部
+                }else{
+                        document.getElementById("movie-container").innerHTML = "<h2>初步选择完成！</h2>";
+                        document.getElementById("choice-buttons").style.display = "none";
+                        showRecommendation();   //显示推荐
+                }
+        }
+
+        //推荐逻辑(根据用户喜欢的类型)
+        function showRecommendation(){
+                const likedGenres = [];
+
+                for (let name in userChoices){
+                        if(userChoices[name] === "Like"){
+                                const genre = movies.find(m => m.name === name)?.genre;
+                                if(genre && !likedGenres.includes(genre)){
+                                        likedGenres.push(genre);
+                                }
+                        }
+                }
+
+                if (likedGenres.length === 0){
+                        document.getElementById("recommendation").innerText = "你还没有标记喜欢的电影，无法推荐";
+                        return;
+                }
+
+                const candidates = movies.filter(m => likedGenres.includes(m.genre) && !(m.name in userChoices));
+                if(candidates.length > 0){
+                        const rec = candidates[Math.floor(Math.random() * candidates.length)];
+                        document.getElementById("recommendation").innerHTML = `
+                                <h3>推荐你看看:</h3>
+                                <p><strong>${rec.name}</strong> (${rec.year}) | 评分: ${rec.rating} | 类型: ${rec.genre}</p>
+                                <p>${rec.description}</p>
+                              `;
+                }else{
+                        document.getElementById("recommendation").innerText = "没有更多可推荐的电影了，试试多选几个喜欢的！";    
+                }
+        }
+
+        function toggleFavorite(){
+                const movie = selectedMovies[currentIndex];
+                const exists = favorites.find(f => f.name === movie.name);
+        if(exists){
+                //取消收藏
+                favorites = favorites.find(f => f.name !== movie.name);
+        }else{
+                //添加收藏
+                favorites.push(movie);
+        }
+
+        localStorage.setItem("favories", JSON.stringify(favorites));
+        showFavorites();        //更新显示
+        }
+
+        function showFavorites(){
+                const container = document.getElementById("favorite-list");
+
+                if(favorites.lengh === 0){
+                        container.innerHTML = "<h3>你还没有收藏任何电影</h3>";
+                        return;
+                }
+
+                const html = favorites.map(movie => `<li>${movie.name} (${movie.year})｜${movie.genre}</li>`).join("");
+
+                container.innerHTML = `
+                        <h3>你收藏的电影:</h3>
+                        <ul>${html}</ul>
+                        `;     
+        }
+
+        //清楚历史记录
+        function clearChoices(){
+                localStorage.removeItem("userChoices");
+                alert("已清除历史记录，请刷新页面重新开始！");
+        }
+        
+        function recommendMore(){
+                const likedGenres = [];
+
+                for (let name in userChoices){
+                        if(userChoices[name] === "Like"){
+                                const genre = movies.find(m => m.name === name)?.genre;
+                                if(genre && !likedGenres.includes(genre)){
+                                        likedGenres.push(genre);
+                                }
+                        }
+                }
+
+                const candidates = movies.filter(m => likedGenres.includes(m.genre) && !(m.name in userChoices) && !recommendedMovies.includes(m.name));
+
+                if(candidates.length > 0){
+                        const rec = candidates[Math.floor(Math.random() * candidates.length)];
+                        recommendedMovies.push(rec.name);       //标记已推荐
+                        const recDiv = document.getElementById("recommendation");
+                        recDiv.innerHTML += `
+                        <div style = "margin-top: 10px; padding: 10px; border-top: 1px solid #ccc;">
+                          <p><strong>${rec.name}</strong>(${rec.year}) | 评分：${rec.rating}｜类型：${rec.genre}</p>
+                          <p>${rec.description}</p>
+                        </div>
+                      `;
+                }else{
+                        alert("没有更多电影可以推荐了!");
+                }
+        }
+
+        //页面加载后启动流程
+        window.onload = () => {
+                if(Object.keys(userChoices).length >= 10){
+                        document.getElementById("movie-container").innerHTML = "<h2>欢迎回来！</h2>";
+                        document.getElementById("choice-buttons").style.display = "none";
+                        showRecommendation();
+                }else{
+                        selectedMovies = getRandomMovies();
+                        showCurrentMovie();  
+                }
+                showFavorites();
+        };
+
+        </script>
+
+</body>
+</html>
