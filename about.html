@@ -22,46 +22,49 @@
   </style>
 </head>
 <body>
-    <h1>🎬 关于这个项目</h1>
+  <h1>🎬 关于本项目</h1>
 
-    <p>这是一个<strong>基于用户偏好的电影推荐系统</strong>，作为我学习前端开发 + 产品设计的练手项目。</p>
-    
-    <h2>💡 项目功能（当前已实现）</h2>
-    <ul>
-      <li>首次打开页面，逐一展示10部随机电影</li>
-      <li>用户对每部电影选择“喜欢 / 不喜欢 / 没看过”</li>
-      <li>根据“喜欢”的类型推荐电影</li>
-      <li>支持继续推荐（不限一轮）</li>
-      <li>收藏电影、查看收藏列表</li>
-      <li>数据保存在本地浏览器，页面刷新不丢失</li>
-    </ul>
-    
-    <h2>📌 使用方式</h2>
-    <ol>
-      <li>点击 <a href="index.html">首页</a> 进入推荐页面</li>
-      <li>对每一部电影作出反馈</li>
-      <li>完成10部后获取推荐结果</li>
-      <li>可以收藏 / 再推荐</li>
-    </ol>
-    
-    <h2>🛠️ 后续计划升级</h2>
-    <ul>
-      <li>✨ 推荐理由解释（“因为你喜欢剧情片”）</li>
-      <li>📊 收藏或喜好统计图表（Chart.js）</li>
-      <li>🌐 支持国家 / 语言 / 类型筛选器</li>
-      <li>📱 页面响应式优化（适配手机端）</li>
-      <li>🧩 支持导入用户自定义电影数据</li>
-      <li>🔗 数据源改为在线获取（TMDB API）</li>
-    </ul>
-    
-    <h2>📦 数据来源说明（计划）</h2>
-    <p>当前为自定义静态电影数据（20部）<br>
-    计划后期接入 <strong><a href="https://www.themoviedb.org/documentation/api" target="_blank">TMDB API</a></strong> 实现动态获取真实数据，包括评分、类型、封面图、语言等。</p>
-    
-    <h2>👨‍💻 作者</h2>
-    <p>项目由 rinatt214 制作，作为前端+产品实战的练习。<br>
-    <a href="https://github.com/rinatt214" target="_blank">我的 GitHub</a></p>
-    
-    <p><a href="index.html">⬅ 返回首页</a></p>
+  <p>这是一个基于 TMDB API 的<strong>电影推荐系统</strong>，本项目作为完整前端练习工程构建，已上线部署。</p>
+  
+  <h2>🛠 当前功能</h2>
+  <ul>
+    <li>首次使用时，从 TMDB 实时加载热门电影数据</li>
+    <li>逐部展示 10 部电影，用户选择“喜欢 / 不喜欢 / 没看过”</li>
+    <li>基于喜欢的类型智能推荐新电影，支持评分优先</li>
+    <li>显示电影封面、评分、简介、类型等卡片式信息</li>
+    <li>收藏功能 + 收藏图表分析（类型偏好、评分分布）</li>
+    <li>响应式设计支持手机访问</li>
+    <li>深色模式切换（开发中）</li>
+    <li>项目采用模块化结构（HTML / CSS / JS 多文件）</li>
+  </ul>
+  
+  <h2>📂 项目结构</h2>
+  <ul>
+    <li><code>index.html</code>：主页面</li>
+    <li><code>style.css</code>：样式文件</li>
+    <li><code>js/</code> 文件夹中包含：
+      <ul>
+        <li><code>api.js</code>：数据获取（TMDB）</li>
+        <li><code>logic.js</code>：用户交互逻辑</li>
+        <li><code>ui.js</code>：页面渲染（卡片、推荐、图表）</li>
+        <li><code>utils.js</code>：辅助函数</li>
+        <li><code>main.js</code>：页面入口与初始化</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <h2>🔮 后续计划</h2>
+  <ul>
+    <li>增加类型筛选器（只看“剧情+动作”等）</li>
+    <li>支持多语言切换</li>
+    <li>分享推荐结果</li>
+    <li>支持多用户切换记录</li>
+  </ul>
+  
+  <h2>👨‍💻 作者</h2>
+  <p>由 rinatt214 开发，用于前端技能提升与项目实战。<br>
+  <a href="https://github.com/rinatt214" target="_blank">GitHub 主页</a></p>
+  
+  <p><a href="index.html">⬅ 返回首页</a></p>
 </body>
 </html>
