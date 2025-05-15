@@ -11,20 +11,16 @@
         <h1>欢迎使用电影推荐系统</h1>
         <!--展示电影信息的容器-->
         <div id="movie-container"></div>
+        <!--推荐区域-->
+        <div id="recommendation" class="recommendation-area" style="margin-top: 30px;"></div>
+
 
         <!--选择按钮-->
-        <div id="choice-buttons" style="margin-top: 20px;">
-                <button onclick="handleChoice('Like')">Like</button>
-                <button onclick="handleChoice('Dislike')">DisLike</button>
-                <button onclick="handleChoice('Dont know')">DontKnow</button>
-        </div>
 
         <button onclick="clearChoices()" style="background-color: red; margin-top: 20px">清除历史记录</button>
-        <button onclick="toggleFavorite()">收藏</button>
         <div id="favorite-list" style="margin-top: 30px;"></div>
 
         <!--推荐区域-->
-        <div id="recommendation" style="margin-top: 30px;"></div>
         <button onclick="recommendMore()" style="margin-top: 15px;">再推荐一部</button>
 
         <!--图表-->
@@ -34,6 +30,7 @@
         <script src="js/utils.js"></script>
         <script src="js/api.js"></script>
         <script src="js/logic.js"></script>
+        <script src="js/recommender.js"></script>
         <script src="js/ui.js"></script>
         <script src="js/main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

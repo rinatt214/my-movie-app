@@ -10,18 +10,27 @@ let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
 //处理按钮点击
 function handleChoice(feedback){
-    const movie = selectedMovies[currentIndex];
-    userChoices[movie.name] = feedback;
-    localStorage.setItem("userChoices", JSON.stringify(userChoices));
-    currentIndex++;
+  const movie = selectedMovies[currentIndex]; // 获取当前展示的电影
+  userChoices[movie.name] = feedback; // 记录用户对该电影的反馈
+  localStorage.setItem("userChoices", JSON.stringify(userChoices)); // 存入本地记忆
+  currentIndex++; // 进入下一部
 
-    if(currentIndex < selectedMovies.length){
-            showCurrentMovie();     //显示下一部
-    }else{
-            document.getElementById("movie-container").innerHTML = "<h2>初步选择完成！</h2>";
-            document.getElementById("choice-buttons").style.display = "none";
-            showRecommendation();   //显示推荐
-    }
+  if (currentIndex < selectedMovies.length) {
+    showCurrentMovie(); // 继续展示下一部初始电影
+  } else {
+    // 所有初始选择完成后，切换到推荐阶段
+    document.getElementById("movie-container").innerHTML = "<h2>🎉 初步选择完成！</h2>";
+    //document.getElementById("choice-buttons").style.display = "none";
+    document.getElementById("recommendation").innerHTML = "";  // 清空推荐区域
+    showRecommendation(); // ✅ 立刻开始推荐
+  }
+}
+
+function handleRecommendationChoice(name, feedback){
+        userChoices[name] = feedback;
+        localStorage.setItem("userChoices", JSON.stringify(userChoices));
+
+        showRecommendation(); //再推荐一部
 }
 
 function toggleFavorite(){

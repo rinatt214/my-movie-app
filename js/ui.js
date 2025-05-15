@@ -5,6 +5,7 @@
 //显示当前电影
 function showCurrentMovie(){
     const movie = selectedMovies[currentIndex];
+    document.getElementById("movie-container").innerHTML = generateMovieCard(movie, false); // false = 初始选择模式
     const container = document.getElementById("movie-container");
     container.innerHTML = `
       <div class = "movie-card">
@@ -12,7 +13,8 @@ function showCurrentMovie(){
         <div class = "movie-info">
           <h2 class="movie-title">${movie.name} <span class="movie-year">(${movie.year})</span></h2>
           <p class="movie-meta">⭐ ${movie.rating.toFixed(1)} | 🎬 ${movie.genre}</p>
-          <p class="movie-desc">${movie.description}</p>
+          <p class="movie-desc collapsed" id="movie-desc">${movie.description}</p>
+          <button class="toggle-desc-btn" onclick="toggleDescription()">▶ 显示更多</button>
           <div class="movie-buttons">
             <button onclick="handleChoice('Like')">👍 喜欢</button>
             <button onclick="handleChoice('DisLike')">👎 不喜欢</button>
@@ -24,43 +26,48 @@ function showCurrentMovie(){
     `;
 }
 
+// 显示推荐 / 初始电影的通用卡片
+function generateMovieCard(movie, isRecommendation = false) {
+  const buttons = isRecommendation
+  ? `
+    <button onclick="handleRecommendationChoice('${movie.name}', 'Like')">👍 喜欢</button>
+    <button onclick="handleRecommendationChoice('${movie.name}', 'Dislike')">👎 不喜欢</button>
+    <button onclick="handleRecommendationChoice('${movie.name}', 'DontKnow')">❓ 没看过</button>
+  `
+  : `
+    <button onclick="handleChoice('Like')">👍 喜欢</button>
+    <button onclick="handleChoice('Dislike')">👎 不喜欢</button>
+    <button onclick="handleChoice('DontKnow')">❓ 没看过</button>
+  `;
+
+return `
+  <div class="movie-card">
+    <img src="${movie.poster}" class="movie-poster" alt="封面图">
+    <div class="movie-info">
+      <h2 class="movie-title">${movie.name} (${movie.year})</h2>
+      <p class="movie-meta">⭐ ${round1(movie.rating)} | 🎬 ${movie.genre}</p>
+      <p class="movie-desc collapsed" id="movie-desc">${movie.description}</p>
+      <button class="toggle-desc-btn" onclick="toggleDescription()">▶ 显示更多</button>
+      <div class="movie-buttons">${buttons}</div>
+    </div>
+  </div>
+`;
+  }
+
 //推荐逻辑(根据用户喜欢的类型)
-function showRecommendation(){
-    const likedGenres = [];
+function showRecommendation() {
+  console.log("开始推荐电影");
+  const movie = getNextRecommendation(); // 获取一部推荐电影
+  const container = document.getElementById("recommendation");
 
-    for (let name in userChoices){
-            if(userChoices[name] === "Like"){
-                    const genre = movies.find(m => m.name === name)?.genre;
-                    if(genre && !likedGenres.includes(genre)){
-                            likedGenres.push(...genre.split(" / "));
-                    }
-            }
-    }
+  if (!movie) {
+    container.innerHTML = `<p>🎬 没有更多可推荐的电影了，试试多标记几个喜欢的吧！</p>`;
+    return;
+  }
 
-    if (likedGenres.length === 0){
-            document.getElementById("recommendation").innerText = "你还没有标记喜欢的电影，无法推荐";
-            return;
-    }
+  container.innerHTML = generateMovieCard(movie, true); // 展示推荐卡片  // true = 推荐模式
+  }
 
-    const candidates = movies.filter(m => likedGenres.some(type => m.genre.includes(type)) && !(m.name in userChoices));
-    if(candidates.length > 0){
-            //按评分从高到低排序
-            candidates.sort((a, b) => b.rating - a.rating);
-
-            //用前3个评分最高的随机推荐一部
-            const topRated = candidates.slice(0,3);
-            const rec = topRated[Math.floor(Math.random() * topRated.length)];
-
-            document.getElementById("recommendation").innerHTML = `
-                    <img src="${rec.poster}" alt="封面图" style="max-width: 200px; border-radius: 10px; margin-bottom: 10px;">
-                    <h3>推荐你看看:</h3>
-                    <p><strong>${rec.name}</strong> (${rec.year}) | 评分: ${rec.rating.toFixed(1)} / 10| 类型: ${rec.genre}</p>
-                    <p>${rec.description}</p>
-                  `;
-    }else{
-            document.getElementById("recommendation").innerText = "没有更多可推荐的电影了，试试多选几个喜欢的！";    
-    }
-}
 
 function showFavorites(){
     const container = document.getElementById("favorite-list");
@@ -122,3 +129,15 @@ function showCharts(){
 });
 }
 
+function toggleDescription(){
+    const desc = document.getElementById("movie-desc");
+    const btn = document.querySelector(".toggle-desc-btn");
+
+    if(desc.classList.contains("collapsed")){
+        desc.classList.remove("collapsed");
+        btn.innerText = "▲ 收起";
+    }else{
+        desc.classList.add("collapsed");
+        btn.innerText = "▶ 显示更多";
+    }
+}

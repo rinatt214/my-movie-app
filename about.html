@@ -10,33 +10,53 @@
       margin: 40px auto;
       padding: 0 20px;
       line-height: 1.6;
+      background-color: #fefefe;
+      color: #333;
     }
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
+    h2 {
+      margin-top: 30px;
+    }
     a {
       color: #007bff;
       text-decoration: none;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    ul ul {
+      margin-left: 20px;
     }
   </style>
 </head>
 <body>
   <h1>🎬 关于本项目</h1>
 
-  <p>这是一个基于 TMDB API 的<strong>电影推荐系统</strong>，本项目作为完整前端练习工程构建，已上线部署。</p>
+  <p>这是一个基于 <strong>TMDB API</strong> 的<strong>电影推荐系统</strong>，作为完整前端练习项目构建并已上线部署。</p>
   
   <h2>🛠 当前功能</h2>
   <ul>
-    <li>首次使用时，从 TMDB 实时加载热门电影数据</li>
-    <li>逐部展示 10 部电影，用户选择“喜欢 / 不喜欢 / 没看过”</li>
-    <li>基于喜欢的类型智能推荐新电影，支持评分优先</li>
-    <li>显示电影封面、评分、简介、类型等卡片式信息</li>
-    <li>收藏功能 + 收藏图表分析（类型偏好、评分分布）</li>
-    <li>响应式设计支持手机访问</li>
-    <li>深色模式切换（开发中）</li>
-    <li>项目采用模块化结构（HTML / CSS / JS 多文件）</li>
+    <li>🆕 首次使用时，从 TMDB 实时加载热门电影数据</li>
+    <li>📽️ 逐部展示 10 部电影，用户选择 👍 喜欢 / 👎 不喜欢 / ❓ 没看过</li>
+    <li>🎯 基于偏好类型持续推荐，含 2:1 探索推荐策略</li>
+    <li>🖼️ 显示封面、评分、简介、类型等卡片式信息</li>
+    <li>⭐ 收藏功能 + 图表分析（类型偏好、评分分布）</li>
+    <li>📱 响应式设计支持手机访问</li>
+    <li>🌙 深色模式切换（开发中）</li>
+    <li>🧩 项目采用模块化结构（HTML / CSS / JS 分离）</li>
   </ul>
+
+  <h2>🧠 推荐逻辑说明</h2>
+  <p>
+    系统记录你对每部电影的反馈。当你标记“喜欢”的电影属于某些类型（如 🎞️ 剧情 / 🤖 科幻），系统会优先推荐相同类型中你还没看过的电影。
+    同时也会以 2:1 的比例偶尔推荐其他类型电影，以鼓励探索兴趣边界 🎲。推荐逻辑基于 <code>userChoices</code> 和电影类型动态更新。
+  </p>
   
   <h2>📂 项目结构</h2>
   <ul>
@@ -44,27 +64,29 @@
     <li><code>style.css</code>：样式文件</li>
     <li><code>js/</code> 文件夹中包含：
       <ul>
-        <li><code>api.js</code>：数据获取（TMDB）</li>
-        <li><code>logic.js</code>：用户交互逻辑</li>
-        <li><code>ui.js</code>：页面渲染（卡片、推荐、图表）</li>
-        <li><code>utils.js</code>：辅助函数</li>
-        <li><code>main.js</code>：页面入口与初始化</li>
+        <li><code>api.js</code>：从 TMDB 获取数据</li>
+        <li><code>logic.js</code>：处理用户选择与状态</li>
+        <li><code>ui.js</code>：渲染推荐卡片与收藏功能</li>
+        <li><code>utils.js</code>：辅助函数，如评分格式化</li>
+        <li><code>main.js</code>：初始化与控制流程入口</li>
       </ul>
     </li>
   </ul>
   
   <h2>🔮 后续计划</h2>
   <ul>
-    <li>增加类型筛选器（只看“剧情+动作”等）</li>
-    <li>支持多语言切换</li>
-    <li>分享推荐结果</li>
-    <li>支持多用户切换记录</li>
+    <li>🏷️ 增加类型筛选器（如“剧情 + 动作”）</li>
+    <li>🌐 多语言切换（中 / 英）</li>
+    <li>📤 分享推荐结果</li>
+    <li>👥 多用户切换记录支持</li>
   </ul>
   
   <h2>👨‍💻 作者</h2>
-  <p>由 rinatt214 开发，用于前端技能提升与项目实战。<br>
-  <a href="https://github.com/rinatt214" target="_blank">GitHub 主页</a></p>
-  
-  <p><a href="index.html">⬅ 返回首页</a></p>
+  <p>
+    项目由 <strong>rinatt214</strong> 开发，旨在提升前端实战能力与用户体验设计。<br>
+    👉 <a href="https://github.com/rinatt214" target="_blank">前往 GitHub 主页</a>
+  </p>
+
+  <p style="margin-top: 40px;"><a href="index.html">⬅ 返回首页</a></p>
 </body>
 </html>
